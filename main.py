@@ -22,9 +22,6 @@ if __name__ == '__main__':
     addr = dtrAgent.bind('PUSH', alias='main')
     dtrAgent.connect(addr, handler=log_message)
 
-    addr2 = lrAgent.bind('PUSH', alias='main')
-    lrAgent.connect(addr2, handler=log_message)
-
     #Encaplsulate agents
     dtr = DecisionTreeRegressorAgent(df, agent=dtrAgent);
     dtr.split_dataframe()
@@ -32,6 +29,7 @@ if __name__ == '__main__':
 
     lr = LinearRegressionAgent(df, agent=lrAgent);
     lr.split_dataframe()
+    lr.define_handler
     lr.calculate()
 
     ns.shutdown()

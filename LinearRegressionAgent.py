@@ -28,3 +28,12 @@ class LinearRegressionAgent:
 
     def send_info(self, msg):
         self._agent.send('main', msg)
+
+    def define_handler(self):
+        addr2 = self._agent.bind('PUSH', alias='main')
+
+        self._agent.connect(addr2, handler=self.log_message)
+
+    def log_message(self, message):
+        self._agent.log_info("ELO + ")
+        self._y = message;
