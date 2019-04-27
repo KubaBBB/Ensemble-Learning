@@ -1,0 +1,8 @@
+REGRSSOR = linear regression, decision tree, mlp, logistic regression
+
+Uruchamiasz 4 agenty, kazdy uzywa REGRESSOR i wysyla y_predicted na piatego agenta. Piaty agent liczy finalne y_predicted i mean squard error.
+
+Uruchamiasz 4 agenty, kazdy uzywa innego REGRESSORa i wysyla y_predicted na piatego agenta. Piaty agent liczy finalne y_predicted i mean squard error.
+
+Dzielisz zbior na 5 czesci(20:20:20:20:20) Uruchamiasz 4 agenty, kazdy uzywa REGRESSORa na jednej czesci zbioru i wysyla y_predicted na piatego agenta. Piaty agent liczy finalne y_predicted i mean squard error.
+
