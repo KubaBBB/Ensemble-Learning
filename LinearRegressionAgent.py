@@ -11,7 +11,7 @@ class LinearRegressionAgent(Agent):
 
     def initialize_model(self, df):
         self._df = df;
-        self._model = LinearRegression();
+        self._model = LinearRegression(n_jobs=-1);
 
     def send_info(self):
         self.send('main', f'{self.name} MSE:{self._mse}')
