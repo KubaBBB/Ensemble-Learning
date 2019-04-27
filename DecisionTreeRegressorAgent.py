@@ -24,7 +24,7 @@ class DecisionTreeRegressorAgent:
         self._tree.fit(self._X_train, self._y_train)
         y_predicted = self._tree.predict(self._X_test)
         mse = mean_squared_error(self._y_test, y_predicted)
-        self.send_info(f'Mean Square error: {np.sqrt(mse)}')
+        #self.send_info(f'Mean Square error: {np.sqrt(mse)}')
 
     def send_info(self, msg):
         self._agent.send('main', msg)
