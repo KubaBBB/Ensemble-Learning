@@ -25,7 +25,7 @@ class LinearRegressionAgent:
         y_predicted = self._model.predict(self._X_test)
         mse = mean_squared_error(self._y_test, y_predicted)
         print(f'MSE linear regression: {mse}')
-
+        return mse
         #self.send_info(f'Mean Square error: {np.sqrt(mse)}')
 
     def send_info(self, msg):

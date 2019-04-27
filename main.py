@@ -26,25 +26,31 @@ if __name__ == '__main__':
     #Encaplsulate agents
     dtr = DecisionTreeRegressorAgent(df, agent=dtrAgent);
     dtr.split_dataframe()
-    dtr.calculate()
+    dtr_mse = dtr.calculate()
 
     lr = LinearRegressionAgent(df, agent=lrAgent);
     lr.split_dataframe()
     #lr.define_handler
-    lr.calculate()
-
+    lr_mse = lr.calculate()
 
     # System deployment
-    alice = run_agent('Alice')
-    bob = run_agent('Bob')
+    first_class = run_agent('First_classifier')
+    second_class = run_agent('Second_classifier')
+    classifier = run_agent('Classifier')
 
     # System configuration
-    addr = alice.bind('PUSH', alias='main')
-    bob.connect(addr, handler=log_message)
+    addr1 = first_class.bind('PUSH', alias='main1')
+    addr2 = second_class.bind('PUSH', alias='main2')
+
+    classifier.connect(addr1, handler=log_message)
+    classifier.connect(addr2, handler=log_message)
+
+    #classifier.connect(addr1, handler=log_message)
 
     # Send messages
-    for _ in range(3):
+    for _ in range(1):
         time.sleep(1)
-        alice.send('main', 'Hello, Bob!')
+        first_class.send('main1', f'LR MSE:{lr_mse}')
+        second_class.send('main2', f'DTR MSE:{dtr_mse}')
 
     ns.shutdown()
