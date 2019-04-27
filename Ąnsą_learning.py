@@ -1,4 +1,5 @@
 from osbrain import Agent
+from matplotlib import pyplot as plt
 import json
 
 def log_message(agent, message):
@@ -9,6 +10,7 @@ class Ąnsą_learning(Agent):
         self.bind('PUSH', alias='main')
         self._mse = dict()
         self._y_predicted = dict()
+        self._r2_score = dict()
 
     def send_info(self):
         self.send('main', f'{self.name} MSE:{self._mse}')
@@ -19,9 +21,12 @@ class Ąnsą_learning(Agent):
             self.connect(agent.addr('main'), handler=self.handle_full_message)
 
     def handle_full_message(self, msg):
-
+        self._r2_score[msg['name']] = msg['r2_score']
         self._mse[msg['name']] = msg['mse']
         self._y_predicted[msg['name']] = msg['y_predicted']
+
+    def get_metrics(self):
+        return self._mse, self._r2_score
 
     def debug(self):
         name = self.name

@@ -1,5 +1,6 @@
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
+from sklearn.metrics import r2_score
 from sklearn.linear_model import LinearRegression
 from osbrain import Agent
 import json
@@ -19,6 +20,7 @@ class LinearRegressionAgent(Agent):
     def send_full_message(self):
         msg = {}
         msg['mse'] = self._mse
+        msg['r2_score'] = self._r2_score;
         msg['y_predicted'] = self._y_predicted
         msg['name'] = self.name
         self.send('main', msg)
@@ -37,4 +39,5 @@ class LinearRegressionAgent(Agent):
         self._model.fit(self._X_train, self._y_train)
         y_predicted = self._model.predict(self._X_test)
         self._mse = mean_squared_error(self._y_test, y_predicted)
+        self._r2_score = r2_score(self._y_test, y_predicted)
         self._y_predicted = y_predicted

@@ -1,6 +1,6 @@
 from osbrain import run_agent
 from osbrain import run_nameserver
-import dataInfo
+import DataVisualizer
 from Ąnsą_learning import Ąnsą_learning
 import time
 import pandas as pd
@@ -15,7 +15,7 @@ def log_message(agent, message):
 if __name__ == '__main__':
     # Dataset
     df = pd.read_csv('./housesalesprediction/kc_house_data.csv');
-    #dataInfo.print_corelation_heatmap(df)
+    #DataVisualizer.print_corelation_heatmap(df)
 
     # System deployment
     ns = run_nameserver()
@@ -62,6 +62,9 @@ if __name__ == '__main__':
     #logistic_agent.send_info()
     #mlp_agent.send_info()
     #decision_agent.send_info()
+
+    metrics = [classifier.get_metrics()]
+    DataVisualizer.print_metrics(metrics[0])
 
     classifier.debug()
 
