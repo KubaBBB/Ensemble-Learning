@@ -3,8 +3,8 @@ from osbrain import run_nameserver
 import dataInfo
 import time
 import pandas as pd
-from DecisionTreeRegressorAgent import DecisionTreeRegressorAgent
-from LinearRegressionAgent import LinearRegressionAgent
+from DecisionTreeClassifier import DecisionTreeClassifier
+from LinearRegressionClassifier import LinearRegressionClassifier
 
 def log_message(agent, message):
     agent.log_info('Received: %s' % message)
@@ -16,41 +16,27 @@ if __name__ == '__main__':
 
     # System deployment
     ns = run_nameserver()
-    lrAgent = run_agent('lrAgent')
-    dtrAgent = run_agent('dtrAgent')
-
-    # System configuration
-    #addr = dtrAgent.bind('PUSH', alias='main')
-    #dtrAgent.connect(addr, handler=log_message)
-
-    #Encaplsulate agents
-    dtr = DecisionTreeRegressorAgent(df, agent=dtrAgent);
-    dtr.split_dataframe()
-    dtr_mse = dtr.calculate()
-
-    lr = LinearRegressionAgent(df, agent=lrAgent);
-    lr.split_dataframe()
-    #lr.define_handler
-    lr_mse = lr.calculate()
 
     # System deployment
-    first_class = run_agent('First_classifier')
-    second_class = run_agent('Second_classifier')
+    linear_agent = run_agent('Linear_classifier', base=LinearRegressionClassifier)
+    linear_agent.initialize_model(df)
+    linear_agent.split_dataframe()
+    linear_mse = linear_agent.calculate()
+
+    decision_agent = run_agent('Decision_classifier', base=DecisionTreeClassifier)
+    decision_agent.initialize_model(df)
+    decision_agent.split_dataframe()
+    decision_mse = decision_agent.calculate()
+
     classifier = run_agent('Classifier')
 
-    # System configuration
-    addr1 = first_class.bind('PUSH', alias='main1')
-    addr2 = second_class.bind('PUSH', alias='main2')
-
-    classifier.connect(addr1, handler=log_message)
-    classifier.connect(addr2, handler=log_message)
-
-    #classifier.connect(addr1, handler=log_message)
+    classifier.connect(linear_agent.addr('main'), handler=log_message)
+    classifier.connect(decision_agent.addr('main'), handler=log_message)
 
     # Send messages
     for _ in range(1):
         time.sleep(1)
-        first_class.send('main1', f'LR MSE:{lr_mse}')
-        second_class.send('main2', f'DTR MSE:{dtr_mse}')
+        linear_agent.send_info()
+        decision_agent.send_info()
 
     ns.shutdown()

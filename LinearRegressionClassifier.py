@@ -1,14 +1,20 @@
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 from sklearn.linear_model import LinearRegression
-import numpy as np
+from osbrain import Agent
 
 
-class LinearRegressionAgent:
-    def __init__(self, df, agent):
+class LinearRegressionClassifier(Agent):
+    def on_init(self):
+        self.bind('PUSH', alias='main')
+        self._mse = 0.0
+
+    def initialize_model(self, df):
         self._df = df;
         self._model = LinearRegression();
-        self._agent = agent;
+
+    def send_info(self):
+        self.send('main', f'LR MSE:{self._mse}')
 
     def split_dataframe(self):
         train_set, test_set = train_test_split(self._df, test_size=0.2, random_state=42)
@@ -23,19 +29,4 @@ class LinearRegressionAgent:
     def calculate(self):
         self._model.fit(self._X_train, self._y_train)
         y_predicted = self._model.predict(self._X_test)
-        mse = mean_squared_error(self._y_test, y_predicted)
-        print(f'MSE linear regression: {mse}')
-        return mse
-        #self.send_info(f'Mean Square error: {np.sqrt(mse)}')
-
-    def send_info(self, msg):
-        self._agent.send('main', msg)
-
-    def define_handler(self):
-        addr2 = self._agent.bind('PUSH', alias='main')
-
-        self._agent.connect(addr2, handler=self.log_message)
-
-    def log_message(self, message):
-        self._agent.log_info("ELO + ")
-        self._y = message;
+        self._mse = mean_squared_error(self._y_test, y_predicted)

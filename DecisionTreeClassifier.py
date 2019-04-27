@@ -1,14 +1,19 @@
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 from sklearn.tree import DecisionTreeRegressor
-import numpy as np
+from osbrain import Agent
 
+class DecisionTreeClassifier(Agent):
+    def on_init(self):
+        self.bind('PUSH', alias='main')
+        self._mse = 0.0
 
-class DecisionTreeRegressorAgent:
-    def __init__(self, df, agent):
+    def initialize_model(self, df):
         self._df = df;
         self._tree = DecisionTreeRegressor();
-        self._agent = agent;
+
+    def send_info(self):
+        self.send('main', f'DTR MSE:{self._mse}')
 
     def split_dataframe(self):
         train_set, test_set = train_test_split(self._df, test_size=0.2, random_state=42)
@@ -23,10 +28,6 @@ class DecisionTreeRegressorAgent:
     def calculate(self):
         self._tree.fit(self._X_train, self._y_train)
         y_predicted = self._tree.predict(self._X_test)
-        mse = mean_squared_error(self._y_test, y_predicted)
-        print(f'MSE decision tree: {mse}')
-        return mse
-        #self.send_info(f'Mean Square error: {np.sqrt(mse)}')
-
-    def send_info(self, msg):
-        self._agent.send('main', msg)
+        self._mse = mean_squared_error(self._y_test, y_predicted)
+        print(f'MSE decision tree: {self._mse}')
+        return self._mse
