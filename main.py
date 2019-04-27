@@ -34,17 +34,17 @@ if __name__ == '__main__':
     decision_agent = run_agent('Decision_classifier', base=DecisionTreeAgent)
     decision_agent.initialize_model(df)
     decision_agent.split_dataframe()
-    decision_agent.calculate()
+    #decision_agent.calculate()
 
     mlp_agent = run_agent('MLP_classifier', base=MLPAgent)
     mlp_agent.initialize_model(df)
     mlp_agent.split_dataframe()
-    mlp_agent.calculate()
+    #mlp_agent.calculate()
 
     logistic_agent = run_agent('Logisitic_regression_classifier', base=LogisticRegressionAgent)
     logistic_agent.initialize_model(df)
     logistic_agent.split_dataframe()
-    logistic_agent.calculate()
+    #logistic_agent.calculate()
 
     classifier = run_agent('Classifier', base=Ąnsą_learning)
     classifier.define_addr_conn(linear_agents)
@@ -56,10 +56,13 @@ if __name__ == '__main__':
     # Send messages
     for agent in linear_agents:
         time.sleep(1)
-        agent.send_info()
+        agent.send_full_message()
+        #agent.send_info()
 
-    logistic_agent.send_info()
+    #logistic_agent.send_info()
     #mlp_agent.send_info()
     #decision_agent.send_info()
+
+    classifier.debug()
 
     ns.shutdown()

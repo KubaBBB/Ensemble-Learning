@@ -2,7 +2,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 from sklearn.linear_model import LinearRegression
 from osbrain import Agent
-
+import json
 
 class LinearRegressionAgent(Agent):
     def on_init(self):
@@ -15,6 +15,13 @@ class LinearRegressionAgent(Agent):
 
     def send_info(self):
         self.send('main', f'{self.name} MSE:{self._mse}')
+
+    def send_full_message(self):
+        msg = {}
+        msg['mse'] = self._mse
+        msg['y_predicted'] = self._y_predicted
+        msg['name'] = self.name
+        self.send('main', msg)
 
     def split_dataframe(self):
         train_set, test_set = train_test_split(self._df, test_size=0.2)
@@ -30,3 +37,4 @@ class LinearRegressionAgent(Agent):
         self._model.fit(self._X_train, self._y_train)
         y_predicted = self._model.predict(self._X_test)
         self._mse = mean_squared_error(self._y_test, y_predicted)
+        self._y_predicted = y_predicted

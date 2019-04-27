@@ -26,7 +26,7 @@ class LogisticRegressionAgent(Agent):
         self._y_test = test_set[['price']]
 
     def calculate(self):
-        self._model.fit(self._X_train, self._y_train)
+        self._model.fit(self._X_train, self._y_train.values.ravel())
         y_predicted = self._model.predict(self._X_test)
         self._mse = mean_squared_error(self._y_test, y_predicted)
         return self._mse

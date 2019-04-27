@@ -9,8 +9,8 @@ class MLPAgent(Agent):
         self._mse = 0.0
 
     def initialize_model(self, df):
-        self._df = df;
-        self._model = MLPRegressor();
+        self._df = df
+        self._model = MLPRegressor()
 
     def send_info(self):
         self.send('main', f'{self.name} MSE:{self._mse}')
@@ -26,7 +26,7 @@ class MLPAgent(Agent):
         self._y_test = test_set[['price']]
 
     def calculate(self):
-        self._model.fit(self._X_train, self._y_train)
+        self._model.fit(self._X_train, self._y_train.values.ravel())
         y_predicted = self._model.predict(self._X_test)
         self._mse = mean_squared_error(self._y_test, y_predicted)
         return self._mse
