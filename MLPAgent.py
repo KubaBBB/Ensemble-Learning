@@ -3,7 +3,7 @@ from sklearn.metrics import mean_squared_error
 from sklearn.neural_network import MLPRegressor
 from osbrain import Agent
 
-class MLPClassifier(Agent):
+class MLPAgent(Agent):
     def on_init(self):
         self.bind('PUSH', alias='main')
         self._mse = 0.0
