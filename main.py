@@ -1,6 +1,7 @@
 from osbrain import run_agent
 from osbrain import run_nameserver
 import dataInfo
+from Ąnsą_learnign import cl
 import time
 import pandas as pd
 from DecisionTreeClassifier import DecisionTreeClassifier
@@ -33,7 +34,7 @@ if __name__ == '__main__':
     decision_agent.split_dataframe()
     decision_mse = decision_agent.calculate()
 
-    classifier = run_agent('Classifier')
+    classifier = run_agent('Classifier', base=)
 
     classifier.connect(linear_agent1.addr('main'), handler=log_message)
     classifier.connect(linear_agent2.addr('main'), handler=log_message)
