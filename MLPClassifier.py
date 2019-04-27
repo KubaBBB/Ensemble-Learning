@@ -1,16 +1,16 @@
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
-from sklearn.tree import DecisionTreeRegressor
+from sklearn.neural_network import MLPRegressor
 from osbrain import Agent
 
-class DecisionTreeClassifier(Agent):
+class MLPClassifier(Agent):
     def on_init(self):
         self.bind('PUSH', alias='main')
         self._mse = 0.0
 
     def initialize_model(self, df):
         self._df = df;
-        self._model = DecisionTreeRegressor();
+        self._model = MLPRegressor();
 
     def send_info(self):
         self.send('main', f'{self.name} MSE:{self._mse}')

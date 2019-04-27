@@ -6,6 +6,7 @@ import time
 import pandas as pd
 from DecisionTreeClassifier import DecisionTreeClassifier
 from LinearRegressionClassifier import LinearRegressionClassifier
+from MLPClassifier import MLPClassifier
 
 def log_message(agent, message):
     agent.log_info('Received: %s' % message)
@@ -32,17 +33,25 @@ if __name__ == '__main__':
     decision_agent = run_agent('Decision_classifier', base=DecisionTreeClassifier)
     decision_agent.initialize_model(df)
     decision_agent.split_dataframe()
-    decision_mse = decision_agent.calculate()
+    decision_agent.calculate()
+
+    mlp_agent = run_agent('MLP_classifier', base=DecisionTreeClassifier)
+    mlp_agent.initialize_model(df)
+    mlp_agent.split_dataframe()
+    mlp_agent.calculate()
 
     classifier = run_agent('Classifier', base=Ąnsą_learning)
     classifier.define_addr_conn(linear_agents)
 
     classifier.connect(decision_agent.addr('main'), handler=log_message)
+    classifier.connect(mlp_agent.addr('main'), handler=log_message)
 
     # Send messages
     for agent in linear_agents:
         time.sleep(1)
         agent.send_info()
+
+    mlp_agent.send_info()
         #decision_agent.send_info()
 
     ns.shutdown()
