@@ -12,16 +12,21 @@ def log_message(agent, message):
 if __name__ == '__main__':
     # Dataset
     df = pd.read_csv('./housesalesprediction/kc_house_data.csv');
-    dataInfo.print_corelation_heatmap(df)
+    #dataInfo.print_corelation_heatmap(df)
 
     # System deployment
     ns = run_nameserver()
 
     # System deployment
-    linear_agent = run_agent('Linear_classifier', base=LinearRegressionClassifier)
-    linear_agent.initialize_model(df)
-    linear_agent.split_dataframe()
-    linear_mse = linear_agent.calculate()
+    linear_agent1 = run_agent('Linear_classifier1', base=LinearRegressionClassifier)
+    linear_agent1.initialize_model(df)
+    linear_agent1.split_dataframe()
+    linear_agent1.calculate()
+
+    linear_agent2 = run_agent('Linear_classifier2', base=LinearRegressionClassifier)
+    linear_agent2.initialize_model(df)
+    linear_agent2.split_dataframe()
+    linear_agent2.calculate()
 
     decision_agent = run_agent('Decision_classifier', base=DecisionTreeClassifier)
     decision_agent.initialize_model(df)
@@ -30,13 +35,15 @@ if __name__ == '__main__':
 
     classifier = run_agent('Classifier')
 
-    classifier.connect(linear_agent.addr('main'), handler=log_message)
+    classifier.connect(linear_agent1.addr('main'), handler=log_message)
+    classifier.connect(linear_agent2.addr('main'), handler=log_message)
     classifier.connect(decision_agent.addr('main'), handler=log_message)
 
     # Send messages
     for _ in range(1):
         time.sleep(1)
-        linear_agent.send_info()
+        linear_agent1.send_info()
+        linear_agent2.send_info()
         decision_agent.send_info()
 
     ns.shutdown()

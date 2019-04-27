@@ -13,10 +13,10 @@ class DecisionTreeClassifier(Agent):
         self._tree = DecisionTreeRegressor();
 
     def send_info(self):
-        self.send('main', f'DTR MSE:{self._mse}')
+        self.send('main', f'{self.name} MSE:{self._mse}')
 
     def split_dataframe(self):
-        train_set, test_set = train_test_split(self._df, test_size=0.2, random_state=42)
+        train_set, test_set = train_test_split(self._df, test_size=0.2)
         self._train_set = train_set
         self._test_set = test_set
         self._X_train = train_set.drop(['id', 'date', 'price'], axis=1)
@@ -29,5 +29,4 @@ class DecisionTreeClassifier(Agent):
         self._tree.fit(self._X_train, self._y_train)
         y_predicted = self._tree.predict(self._X_test)
         self._mse = mean_squared_error(self._y_test, y_predicted)
-        print(f'MSE decision tree: {self._mse}')
         return self._mse

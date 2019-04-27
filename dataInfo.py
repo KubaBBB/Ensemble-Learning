@@ -7,7 +7,7 @@ def print_corelation_heatmap(df):
     correlation = df.corr()
     plt.figure(figsize=(14, 12))
     sns.heatmap(correlation, annot=True, linewidths=0, vmin=-1, cmap="RdBu_r")
-    #plt.show()
+    plt.show()
 
 def print_dataset_info(df):
     print(df.head(n=10))
