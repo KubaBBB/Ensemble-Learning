@@ -1,6 +1,7 @@
 from osbrain import run_agent
 from osbrain import run_nameserver
 import dataInfo
+import time
 import pandas as pd
 from DecisionTreeRegressorAgent import DecisionTreeRegressorAgent
 from LinearRegressionAgent import LinearRegressionAgent
@@ -31,5 +32,19 @@ if __name__ == '__main__':
     lr.split_dataframe()
     #lr.define_handler
     lr.calculate()
+
+
+    # System deployment
+    alice = run_agent('Alice')
+    bob = run_agent('Bob')
+
+    # System configuration
+    addr = alice.bind('PUSH', alias='main')
+    bob.connect(addr, handler=log_message)
+
+    # Send messages
+    for _ in range(3):
+        time.sleep(1)
+        alice.send('main', 'Hello, Bob!')
 
     ns.shutdown()
