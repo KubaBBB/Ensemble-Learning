@@ -1,7 +1,7 @@
 from osbrain import run_agent
 from osbrain import run_nameserver
 import dataInfo
-from Ąnsą_learnign import cl
+from Ąnsą_learning import Ąnsą_learning
 import time
 import pandas as pd
 from DecisionTreeClassifier import DecisionTreeClassifier
@@ -19,32 +19,30 @@ if __name__ == '__main__':
     ns = run_nameserver()
 
     # System deployment
-    linear_agent1 = run_agent('Linear_classifier1', base=LinearRegressionClassifier)
-    linear_agent1.initialize_model(df)
-    linear_agent1.split_dataframe()
-    linear_agent1.calculate()
+    linear_agents = []
+    for i in range(4):
+        linear_agent = run_agent(f'Linear_classifier{i}', base=LinearRegressionClassifier)
+        linear_agents.append(linear_agent)
 
-    linear_agent2 = run_agent('Linear_classifier2', base=LinearRegressionClassifier)
-    linear_agent2.initialize_model(df)
-    linear_agent2.split_dataframe()
-    linear_agent2.calculate()
+    for agent in linear_agents:
+        agent.initialize_model(df)
+        agent.split_dataframe()
+        agent.calculate()
 
     decision_agent = run_agent('Decision_classifier', base=DecisionTreeClassifier)
     decision_agent.initialize_model(df)
     decision_agent.split_dataframe()
     decision_mse = decision_agent.calculate()
 
-    classifier = run_agent('Classifier', base=)
+    classifier = run_agent('Classifier', base=Ąnsą_learning)
+    classifier.define_addr_conn(linear_agents)
 
-    classifier.connect(linear_agent1.addr('main'), handler=log_message)
-    classifier.connect(linear_agent2.addr('main'), handler=log_message)
     classifier.connect(decision_agent.addr('main'), handler=log_message)
 
     # Send messages
-    for _ in range(1):
+    for agent in linear_agents:
         time.sleep(1)
-        linear_agent1.send_info()
-        linear_agent2.send_info()
-        decision_agent.send_info()
+        agent.send_info()
+        #decision_agent.send_info()
 
     ns.shutdown()
