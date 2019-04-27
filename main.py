@@ -8,6 +8,15 @@ from DecisionTreeAgent import DecisionTreeAgent
 from LinearRegressionAgent import LinearRegressionAgent
 from MLPAgent import MLPAgent
 from LogisticRegressionAgent import LogisticRegressionAgent
+import json
+
+num_of_agents = 4;
+classifier_mapper = {'linear' : 'LinearRegressionAgent',
+                      'decision' : 'DecisionTreeAgent',
+                      'mlp' : 'MLPAgent',
+                      'logistic' : 'LogisticRegressionAgent'
+                     }
+
 
 def log_message(agent, message):
     agent.log_info('Received: %s' % message)
@@ -22,7 +31,7 @@ if __name__ == '__main__':
 
     # System deployment
     linear_agents = []
-    for i in range(2):
+    for i in range(num_of_agents):
         linear_agent = run_agent(f'Linear_classifier{i}', base=LinearRegressionAgent)
         linear_agents.append(linear_agent)
 
@@ -57,11 +66,12 @@ if __name__ == '__main__':
     for agent in linear_agents:
         time.sleep(1)
         agent.send_full_message()
-        #agent.send_info()
 
     #logistic_agent.send_info()
     #mlp_agent.send_info()
     #decision_agent.send_info()
+
+    time.sleep(3)
 
     metrics = [classifier.get_metrics()]
     DataVisualizer.print_metrics(metrics[0])

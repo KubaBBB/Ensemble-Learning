@@ -17,15 +17,14 @@ def print_dataset_info(df):
 
 def print_metrics(metrics):
     labels = ['MSE', 'R2 score']
-    index = np.arange(len(metrics))
     bar_width = 0.30
-    bar_height = 0.50
     counter = 0
 
     for metric in metrics:
         values = [float(item) for item in metric.values()]
+        index = np.arange(len(metric))
         bars = []
-        for i in range(len(labels)):
+        for i in range(len(metric)):
             bar = plt.bar(index[i] + bar_width, values[i], width=bar_width)
             bars += bar;
         plt.xticks(index + bar_width, labels=metric.keys())
@@ -39,5 +38,4 @@ def print_metrics(metrics):
         plt.tight_layout()
         plt.savefig(f'Metric: {labels[counter]}.png')
         plt.show()
-        counter+=1
-
+        counter += 1
