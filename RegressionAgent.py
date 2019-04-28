@@ -29,8 +29,7 @@ class RegressionAgent(Agent):
 
     def send_full_message(self):
         msg = {}
-        msg['mse'] = self.metrics['mse']
-        msg['r2_score'] = self.metrics['r2_score'];
+        msg['metrics'] = self.metrics
         msg['y_predicted'] = self.y_predicted
         msg['name'] = self.name
         self.send('main', msg)
@@ -44,3 +43,4 @@ class RegressionAgent(Agent):
     def calculate_metrics(self, y_predicted):
         self.metrics['mse'] = mean_squared_error(self.y_test, y_predicted)
         self.metrics['r2_score'] = r2_score(self.y_test, y_predicted)
+        self.metrics['median'] = median_absolute_error(self.y_test, y_predicted)
