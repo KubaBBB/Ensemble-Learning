@@ -1,14 +1,9 @@
 from osbrain import Agent
-from sklearn.metrics import mean_squared_error
-from sklearn.metrics import r2_score
-from sklearn.metrics import median_absolute_error
-from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score, median_absolute_error
+from sklearn.linear_model import LinearRegression, LogisticRegression
 from sklearn.tree import DecisionTreeRegressor
-from sklearn.linear_model import LogisticRegression
 from sklearn.neural_network import MLPRegressor
-import json
-
-regressor_types = ['LinearRegression', 'DecisionTreeRegressor', 'LogisticRegression']
+from models import Model
 
 
 class RegressionAgent(Agent):
@@ -17,8 +12,20 @@ class RegressionAgent(Agent):
         self.metrics = {}
         self.type = None
 
-    def initialize_agent(self, model, x_train, y_train, x_test, y_test, iterator):
-        self.model = model
+    def choose_model(self, model_name):
+        if model_name == Model.DECISION_TREE:
+            return DecisionTreeRegressor()
+        elif model_name == Model.LINEAR_REGRESSION:
+            return LinearRegression(n_jobs=-1)
+        elif model_name == Model.LOGISTIC_REGRESSION:
+            return LogisticRegression(n_jobs=-1)
+        elif model_name == Model.MLP:
+            return MLPRegressor()
+        else:
+            raise NotImplementedError('Wrong model\'s name provided')
+
+    def initialize_agent(self, model_name, x_train, y_train, x_test, y_test, iterator):
+        self.model = self.choose_model(model_name)
         self.x_train = x_train
         self.y_train = y_train
         self.x_test = x_test
