@@ -1,26 +1,26 @@
 from osbrain import Agent
-from sklearn.metrics import mean_squared_error, r2_score, median_absolute_error
+from sklearn.metrics import mean_squared_error, r2_score, median_absolute_error, accuracy_score
 from sklearn.linear_model import LinearRegression, LogisticRegression
-from sklearn.tree import DecisionTreeRegressor
-from sklearn.neural_network import MLPRegressor
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.neural_network import MLPClassifier
 from models import Model
 
 
 class RegressionAgent(Agent):
     def on_init(self):
         self.bind('PUSH', alias='main')
-        self.metrics = {}
+        self.acc = 0
         self.type = None
 
     def choose_model(self, model_name):
         if model_name == Model.DECISION_TREE:
-            return DecisionTreeRegressor()
+            return DecisionTreeClassifier()
         elif model_name == Model.LINEAR_REGRESSION:
             return LinearRegression(n_jobs=-1)
         elif model_name == Model.LOGISTIC_REGRESSION:
-            return LogisticRegression(n_jobs=-1)
+            return LogisticRegression(n_jobs=-1, verbose=0, solver='lbfgs', multi_class='multinomial')
         elif model_name == Model.MLP:
-            return MLPRegressor()
+            return MLPClassifier(hidden_layer_sizes=(50))
         else:
             raise NotImplementedError('Wrong model\'s name provided')
 
@@ -34,7 +34,7 @@ class RegressionAgent(Agent):
 
     def send_full_message(self):
         msg = {}
-        msg['metrics'] = self.metrics
+        msg['metrics'] = self.acc
         msg['y_predicted'] = self.y_predicted
         msg['name'] = self.type
         self.send('main', msg)
@@ -51,9 +51,8 @@ class RegressionAgent(Agent):
         self.model.fit(self.x_train, self.y_train)
         y_predicted = self.model.predict(self.x_test)
         self.y_predicted = y_predicted
-        self.calculate_metrics(y_predicted)
+        y_predicted_classes = [round(elem) for elem in y_predicted]
+        self.calculate_metrics(y_predicted_classes)
 
     def calculate_metrics(self, y_predicted):
-        self.metrics['mse'] = mean_squared_error(self.y_test, y_predicted)
-        self.metrics['r2_score'] = r2_score(self.y_test, y_predicted)
-        self.metrics['median'] = median_absolute_error(self.y_test, y_predicted)
+        self.acc = accuracy_score(self.y_test, y_predicted)

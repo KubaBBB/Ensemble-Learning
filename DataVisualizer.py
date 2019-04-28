@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+from math import floor
 
 def print_corelation_heatmap(df):
     df.corr()['price'].sort_values(ascending=False)
@@ -15,37 +16,17 @@ def print_dataset_info(df):
     np.round(df.describe())
     df.isnull().any()
 
+
 def print_metrics(metrics):
-    labels = ['MSE', 'R2 score', 'Median abs error']
-    bar_width = 0.30
+    ind = np.arange(len(metrics))
+    width = 0.35
+    vals = np.array(list(metrics.values()))*100
+    minimum = min(vals)
+    plt.figure()
+    plt.bar(ind, vals-minimum, width, color=['green', 'blue', 'yellow', 'cyan', 'red'])
+    for i, v in zip(ind, vals-minimum):
+        plt.text(i, v, round(vals[i], 2), horizontalalignment='center', verticalalignment='bottom')
 
-    for agent in metrics:
-        metric_keys = list(metrics[agent].keys())
-
-    for idx in range(len(metric_keys)):
-        values = []
-        for agent in metrics:
-            values.append(metrics[agent][metric_keys[idx]])
-        index = np.arange(len(values))
-        bars = []
-        for i in range(len(values)):
-            bar = plt.bar(index[i] + bar_width, values[i], width=bar_width)
-            bars += bar;
-       # plt.xticks(index + bar_width, labels=metrics.keys())
-        for rect in bars:
-            height = rect.get_height()
-            plt.text(rect.get_x() + rect.get_width() / 2.0, height, '%.2f' % height, ha='center', va='bottom')
-        plt.title(f'Metric: {labels[idx]}')
-        plt.xlabel("Classifiers")
-        plt.tick_params(
-            axis='x',  # changes apply to the x-axis
-            which='both',  # both major and minor ticks are affected
-            bottom=False,  # ticks along the bottom edge are off
-            top=False,  # ticks along the top edge are off
-            labelbottom=False)  # labels along the bottom edge are off
-        plt.legend(metrics.keys())
-        axes = plt.gca()
-        axes.set_ylim([min(values)-0.1*min(values), max(values)+0.02*max(values)])
-        plt.tight_layout()
-        plt.savefig(f'Metric: {labels[idx]}.png')
-        plt.show()
+    plt.ylabel('Difference in %')
+    plt.title('Differences in accuracy score')
+    plt.xticks(ind, (metrics.keys()), rotation=15)

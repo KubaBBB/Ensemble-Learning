@@ -1,4 +1,6 @@
 from osbrain import Agent
+from sklearn.metrics import mean_squared_error, r2_score, median_absolute_error, accuracy_score
+
 
 class MasterClassifier(Agent):
     def on_init(self):
@@ -6,9 +8,12 @@ class MasterClassifier(Agent):
         self.metrics = dict()
         self.y_predicted = dict()
 
-    def define_addr_conn(self,agents):
+    def define_addr_conn(self, agents):
         for agent in agents:
             self.connect(agent.addr('main'), handler=self.handle_full_message)
+
+    def set_true_labels(self, y_true):
+        self.y_true = y_true
 
     def handle_full_message(self, msg):
         agent_name = msg['name']
@@ -20,7 +25,11 @@ class MasterClassifier(Agent):
         return self.metrics
 
     def calculate_final_prediction(self):
-        return 2.0
+        final_prediction = list()
+        preds = list(self.y_predicted.values())
+        for p1, p2, p3, p4 in zip(preds[0], preds[1], preds[2], preds[3]):
+            final_prediction.append(round((p1+p2+p3+p4)/4))
+        self.metrics['EnsembleClassifier'] = accuracy_score(self.y_true, final_prediction)
 
     def debug(self):
         name = self.name
