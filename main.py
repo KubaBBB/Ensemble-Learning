@@ -7,21 +7,22 @@ from sklearn.linear_model import LinearRegression
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.linear_model import LogisticRegression
 from sklearn.neural_network import MLPRegressor
+from sklearn.ensemble import RandomForestRegressor
+
 from MasterClassifier import MasterClassifier
 from RegressionAgent import RegressionAgent
 import DataVisualizer
 
-classifier_mapper = {'linear' : 'LinearRegressionAgent',
-                      'decision' : 'DecisionTreeAgent',
-                      'mlp' : 'MLPAgent',
-                      'logistic' : 'LogisticRegressionAgent'
-                     }
-
 models = [
-          LinearRegression(n_jobs=-1),
-          DecisionTreeRegressor(),
-          #LogisticRegression(n_jobs=-1),
-          #MLPRegressor()
+            LinearRegression(n_jobs=-1),
+            DecisionTreeRegressor(),
+            LinearRegression(n_jobs=-1),
+            DecisionTreeRegressor(),
+            LinearRegression(n_jobs=-1),
+            DecisionTreeRegressor(),
+            #RandomForestRegressor,
+            #LogisticRegression(n_jobs=-1),
+            #MLPRegressor()
           ]
 
 
@@ -52,7 +53,7 @@ if __name__ == '__main__':
         agents.append(linear_agent)
 
     for i in range(len(models)):
-        agents[i].initialize_agent(models[i], x_train, y_train, x_test, y_test)
+        agents[i].initialize_agent(models[i], x_train, y_train, x_test, y_test, str(i))
         agents[i].calculate()
 
     master_agent = run_agent('Classifier', base=MasterClassifier)

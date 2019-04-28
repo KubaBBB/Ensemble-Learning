@@ -8,11 +8,8 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.neural_network import MLPRegressor
 import json
 
-classifier_mapper = {'linear' : 'LinearRegressionAgent',
-                      'decision' : 'DecisionTreeAgent',
-                      'mlp' : 'MLPAgent',
-                      'logistic' : 'LogisticRegressionAgent'
-                     }
+regressor_types = ['LinearRegression', 'DecisionTreeRegressor', 'LogisticRegression']
+
 
 class RegressionAgent(Agent):
     def on_init(self):
@@ -20,31 +17,29 @@ class RegressionAgent(Agent):
         self.metrics = {}
         self.type = None
 
-    def initialize_agent(self, model, x_train, y_train, x_test, y_test):
+    def initialize_agent(self, model, x_train, y_train, x_test, y_test, iterator):
         self.model = model
         self.x_train = x_train
         self.y_train = y_train
         self.x_test = x_test
         self.y_test = y_test
+        self.type = type(self.model).__name__ + str(iterator)
 
     def send_full_message(self):
         msg = {}
         msg['metrics'] = self.metrics
         msg['y_predicted'] = self.y_predicted
-        msg['name'] = self.name
+        msg['name'] = self.type
         self.send('main', msg)
 
     def calculate(self):
-        model_type = type(self.model)
+        if self.type is 'LinearRegression':
+            l = 8
+        elif self.type is 'DecisionTreeRegressor':
+            o = 9.0
+        elif self.type is 'LogisticRegression':
+            self.y_train = self.y_train.values.ravel()
 
-        if model_type is type(LinearRegression):
-            p = 9
-        elif model_type is type(DecisionTreeRegressor):
-            p = 9
-        elif model_type is type(LogisticRegression):
-            p = 9
-        elif model_type is type(MLPRegressor):
-            p = 9
 
         self.model.fit(self.x_train, self.y_train)
         y_predicted = self.model.predict(self.x_test)
