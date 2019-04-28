@@ -11,8 +11,6 @@ from MasterClassifier import MasterClassifier
 from RegressionAgent import RegressionAgent
 import DataVisualizer
 
-
-num_of_agents = 2;
 classifier_mapper = {'linear' : 'LinearRegressionAgent',
                       'decision' : 'DecisionTreeAgent',
                       'mlp' : 'MLPAgent',
@@ -38,41 +36,39 @@ def split_dataframe(df):
     return x_train, y_train, x_test, y_test
 
 if __name__ == '__main__':
-    if num_of_agents == len(models):
-        # Dataset
-        df = pd.read_csv('./housesalesprediction/kc_house_data.csv');
-        #DataVisualizer.print_corelation_heatmap(df)
+    # Dataset
+    df = pd.read_csv('./housesalesprediction/kc_house_data.csv');
+    #DataVisualizer.print_corelation_heatmap(df)
 
-        x_train, y_train, x_test, y_test = split_dataframe(df)
+    x_train, y_train, x_test, y_test = split_dataframe(df)
 
-        # System deployment
-        ns = run_nameserver()
+    # System deployment
+    ns = run_nameserver()
 
-        # System deployment
-        agents = []
-        for i in range(num_of_agents):
-            linear_agent = run_agent(f'Agent_classifier{i}', base=RegressionAgent)
-            agents.append(linear_agent)
+    # System deployment
+    agents = []
+    for i in range(len(models)):
+        linear_agent = run_agent(f'Agent_classifier{i}', base=RegressionAgent)
+        agents.append(linear_agent)
 
-        for i in range(num_of_agents):
-            agents[i].initialize_agent(models[i], x_train, y_train, x_test, y_test)
-            agents[i].calculate()
+    for i in range(len(models)):
+        agents[i].initialize_agent(models[i], x_train, y_train, x_test, y_test)
+        agents[i].calculate()
 
-        master_agent = run_agent('Classifier', base=MasterClassifier)
-        master_agent.define_addr_conn(agents)
+    master_agent = run_agent('Classifier', base=MasterClassifier)
+    master_agent.define_addr_conn(agents)
 
-        # Send messages
-        for agent in agents:
-            time.sleep(1)
-            agent.send_full_message()
+    # Send messages
+    for agent in agents:
+        time.sleep(1)
+        agent.send_full_message()
 
-        time.sleep(3)
+    time.sleep(3)
 
-        metrics = [master_agent.get_metrics()]
-        DataVisualizer.print_metrics(metrics[0])
+    metrics = [master_agent.get_metrics()]
+    DataVisualizer.print_metrics(metrics[0])
 
-        master_agent.debug()
+    master_agent.debug()
 
-        ns.shutdown()
-    else:
-        print(f'len(models != num_of_agents')
+    ns.shutdown()
+
