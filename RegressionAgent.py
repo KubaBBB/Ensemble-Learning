@@ -35,6 +35,17 @@ class RegressionAgent(Agent):
         self.send('main', msg)
 
     def calculate(self):
+        model_type = type(self.model)
+
+        if model_type is type(LinearRegression):
+            p = 9
+        elif model_type is type(DecisionTreeRegressor):
+            p = 9
+        elif model_type is type(LogisticRegression):
+            p = 9
+        elif model_type is type(MLPRegressor):
+            p = 9
+
         self.model.fit(self.x_train, self.y_train)
         y_predicted = self.model.predict(self.x_test)
         self.y_predicted = y_predicted

@@ -1,16 +1,16 @@
-from osbrain import run_agent
-from osbrain import run_nameserver
-import DataVisualizer
-from MasterClassifier import MasterClassifier
 import time
 import pandas as pd
+from osbrain import run_agent
+from osbrain import run_nameserver
 from sklearn.model_selection import train_test_split
-from RegressionAgent import RegressionAgent
 from sklearn.linear_model import LinearRegression
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.linear_model import LogisticRegression
 from sklearn.neural_network import MLPRegressor
-import json
+from MasterClassifier import MasterClassifier
+from RegressionAgent import RegressionAgent
+import DataVisualizer
+
 
 num_of_agents = 2;
 classifier_mapper = {'linear' : 'LinearRegressionAgent',
@@ -58,8 +58,8 @@ if __name__ == '__main__':
             agents[i].initialize_agent(models[i], x_train, y_train, x_test, y_test)
             agents[i].calculate()
 
-        classifier = run_agent('Classifier', base=MasterClassifier)
-        classifier.define_addr_conn(agents)
+        master_agent = run_agent('Classifier', base=MasterClassifier)
+        master_agent.define_addr_conn(agents)
 
         # Send messages
         for agent in agents:
@@ -68,10 +68,10 @@ if __name__ == '__main__':
 
         time.sleep(3)
 
-        metrics = [classifier.get_metrics()]
+        metrics = [master_agent.get_metrics()]
         DataVisualizer.print_metrics(metrics[0])
 
-        classifier.debug()
+        master_agent.debug()
 
         ns.shutdown()
     else:
