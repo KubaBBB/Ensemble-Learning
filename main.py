@@ -5,10 +5,13 @@ from models import Model
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from MasterClassifier import MasterClassifier
+from MasterClassifier import Ensemble
 from RegressionAgent import RegressionAgent
 import DataVisualizer
 from math import floor
 import matplotlib.pyplot as plt
+
+average = [Ensemble.WEIGHTED, Ensemble.ARITHMETIC]
 
 models_list = [[Model.DECISION_TREE, Model.DECISION_TREE, Model.DECISION_TREE, Model.DECISION_TREE],
                [Model.DECISION_TREE, Model.DECISION_TREE, Model.DECISION_TREE, Model.DECISION_TREE],
@@ -40,37 +43,38 @@ if __name__ == '__main__':
 
     master_agent = run_agent('DecisionAgent', base=MasterClassifier)
     master_agent.define_addr_conn(agents)
+    for avg in average:
+        for models, split in zip(models_list, split_dataset):
+            number_of_agents = len(models)
+            if split:
+                divisions = [0, 0.25, 0.50, 0.75, 1.0]
+                n_samples = len(x_train)
+                x_train_list = [x_train[floor(divisions[i] * n_samples):floor(divisions[i + 1] * n_samples)] for i in
+                                range(number_of_agents)]  # divide x_train for 4 equal parts
+                y_train_list = [y_train[floor(divisions[i] * n_samples):floor(divisions[i + 1] * n_samples)] for i in
+                                range(number_of_agents)]  # divide y_train for 4 equal parts
+            else:
+                x_train_list = [x_train for _ in range(number_of_agents)]
+                y_train_list = [y_train for _ in range(number_of_agents)]
 
-    for models, split in zip(models_list, split_dataset):
-        number_of_agents = len(models)
-        if split:
-            divisions = [0, 0.25, 0.50, 0.75, 1.0]
-            n_samples = len(x_train)
-            x_train_list = [x_train[floor(divisions[i] * n_samples):floor(divisions[i + 1] * n_samples)] for i in
-                            range(number_of_agents)]  # divide x_train for 4 equal parts
-            y_train_list = [y_train[floor(divisions[i] * n_samples):floor(divisions[i + 1] * n_samples)] for i in
-                            range(number_of_agents)]  # divide y_train for 4 equal parts
-        else:
-            x_train_list = [x_train for _ in range(number_of_agents)]
-            y_train_list = [y_train for _ in range(number_of_agents)]
+            for i in range(number_of_agents):
+                agents[i].initialize_agent(models[i], x_train_list[i], y_train_list[i], x_test, y_test, str(i))
+                agents[i].calculate()
 
-        for i in range(number_of_agents):
-            agents[i].initialize_agent(models[i], x_train_list[i], y_train_list[i], x_test, y_test, str(i))
-            agents[i].calculate()
+            master_agent.set_true_labels(y_test)
 
-        master_agent.set_true_labels(y_test)
+            # Send messages
+            for agent in agents:
+                agent.send_full_message()
+                time.sleep(2)
+            time.sleep(3)
+            master_agent.calculate_final_prediction(avg)
+            metrics = master_agent.get_metrics()
+            DataVisualizer.print_metrics(metrics, f'{avg}_{iterator}')
 
-        # Send messages
-        for agent in agents:
-            agent.send_full_message()
-            time.sleep(1)
-        time.sleep(3)
-        master_agent.calculate_final_prediction()
-        metrics = master_agent.get_metrics()
-        DataVisualizer.print_metrics(metrics, iterator)
-
-        master_agent.clean_cache()
-        master_agent.debug()
-        iterator += 1
+            master_agent.clean_cache()
+            master_agent.debug()
+            iterator += 1
+            time.sleep(4)
     ns.shutdown()
     #plt.show()

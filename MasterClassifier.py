@@ -1,6 +1,9 @@
 from osbrain import Agent
 from sklearn.metrics import mean_squared_error, r2_score, median_absolute_error, accuracy_score
+from enum import Enum
 
+
+weight = [5, 2, 2, 1]
 
 class MasterClassifier(Agent):
     def on_init(self):
@@ -24,11 +27,25 @@ class MasterClassifier(Agent):
     def get_metrics(self):
         return self.metrics
 
-    def calculate_final_prediction(self):
+    def calculate_final_prediction(self, average):
         final_prediction = list()
-        preds = list(self.y_predicted.values())
-        for p1, p2, p3, p4 in zip(preds[0], preds[1], preds[2], preds[3]):
-            final_prediction.append(round((p1+p2+p3+p4)/4))
+        if average == Ensemble.ARITHMETIC:
+            preds = list(self.y_predicted.values())
+            for p1, p2, p3, p4 in zip(preds[0], preds[1], preds[2], preds[3]):
+                final_prediction.append(round((p1 + p2 + p3 + p4) / 4))
+        elif average == Ensemble.WEIGHTED:
+            sorted_agent = self.map_weight()
+            preds = [self.y_predicted[agent] for agent in sorted_agent ]
+            for p1, p2, p3, p4 in zip(preds[0], preds[1], preds[2], preds[3]):
+                final_prediction.append(
+                    round((weight[0] * p1 +
+                           weight[1] * p2 +
+                           weight[2] * p3 +
+                           weight[3] * p4)
+                           / sum(weight)))
+        else:
+            raise NotImplementedError('Wrong average\'s name provided')
+
         self.metrics['EnsembleClassifier'] = r2_score(self.y_true, final_prediction)
 
     def clean_cache(self):
@@ -36,5 +53,20 @@ class MasterClassifier(Agent):
         self.y_predicted = dict()
         self.log_info("Cleaned cache on Master Agent")
 
+    def map_weight(self):
+        metrics = sorted([value for key, value in self.metrics.items()], reverse = True)
+        sorted_agents = [find_key_by_value(self.metrics, metric) for metric in metrics]
+        return sorted_agents
+
     def debug(self):
         name = self.name
+
+def find_key_by_value(dictionary, value_to_map):
+    for key, value in dictionary.items():
+        if value == value_to_map:
+            return key
+
+
+class Ensemble(Enum):
+    ARITHMETIC = 0
+    WEIGHTED = 1
