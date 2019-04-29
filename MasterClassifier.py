@@ -29,7 +29,7 @@ class MasterClassifier(Agent):
         preds = list(self.y_predicted.values())
         for p1, p2, p3, p4 in zip(preds[0], preds[1], preds[2], preds[3]):
             final_prediction.append(round((p1+p2+p3+p4)/4))
-        self.metrics['EnsembleClassifier'] = accuracy_score(self.y_true, final_prediction)
+        self.metrics['EnsembleClassifier'] = r2_score(self.y_true, final_prediction)
 
     def debug(self):
         name = self.name

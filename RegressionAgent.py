@@ -1,26 +1,31 @@
 from osbrain import Agent
 from sklearn.metrics import mean_squared_error, r2_score, median_absolute_error, accuracy_score
-from sklearn.linear_model import LinearRegression, LogisticRegression
+from sklearn.linear_model import LinearRegression, LogisticRegression, BayesianRidge
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neural_network import MLPClassifier
+from sklearn.svm import SVR
+from sklearn.neighbors import KNeighborsRegressor
 from models import Model
+
+
+
+
 
 
 class RegressionAgent(Agent):
     def on_init(self):
         self.bind('PUSH', alias='main')
-        self.acc = 0
         self.type = None
 
     def choose_model(self, model_name):
         if model_name == Model.DECISION_TREE:
             return DecisionTreeClassifier()
-        elif model_name == Model.LINEAR_REGRESSION:
-            return LinearRegression(n_jobs=-1)
-        elif model_name == Model.LOGISTIC_REGRESSION:
-            return LogisticRegression(n_jobs=-1, verbose=0, solver='lbfgs', multi_class='multinomial')
-        elif model_name == Model.MLP:
-            return MLPClassifier(hidden_layer_sizes=(50))
+        elif model_name == Model.SVR:
+            return SVR(kernel='linear', C=1e2, degree=5)
+        elif model_name == Model.BAYESIAN_RIDGE:
+            return BayesianRidge()
+        elif model_name == Model.K_NEIGHBORS:
+            return KNeighborsRegressor(n_jobs=-1)
         else:
             raise NotImplementedError('Wrong model\'s name provided')
 
@@ -34,25 +39,15 @@ class RegressionAgent(Agent):
 
     def send_full_message(self):
         msg = {}
-        msg['metrics'] = self.acc
+        msg['metrics'] = self.r2
         msg['y_predicted'] = self.y_predicted
         msg['name'] = self.type
         self.send('main', msg)
 
     def calculate(self):
-        if self.type is 'LinearRegression':
-            l = 8
-        elif self.type is 'DecisionTreeRegressor':
-            o = 9.0
-        elif self.type is 'LogisticRegression':
-            self.y_train = self.y_train.values.ravel()
-
-
         self.model.fit(self.x_train, self.y_train)
-        y_predicted = self.model.predict(self.x_test)
-        self.y_predicted = y_predicted
-        y_predicted_classes = [round(elem) for elem in y_predicted]
-        self.calculate_metrics(y_predicted_classes)
+        self.y_predicted = self.model.predict(self.x_test)
+        self.calculate_metrics(self.y_predicted)
 
     def calculate_metrics(self, y_predicted):
-        self.acc = accuracy_score(self.y_test, y_predicted)
+        self.r2 = r2_score(self.y_test, y_predicted)
