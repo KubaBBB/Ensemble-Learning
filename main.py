@@ -18,7 +18,7 @@ models_list = [[Model.DECISION_TREE, Model.DECISION_TREE, Model.DECISION_TREE, M
                ]
 
 split_dataset = [False, True, True, True, True]
-
+number_of_agents = 4
 
 def divide_into_train_test(df):
     X = df.drop(['id', 'date', 'price'], axis=1)
@@ -33,6 +33,14 @@ if __name__ == '__main__':
     df = pd.read_csv('./housesalesprediction/kc_house_data.csv')
     x_train, y_train, x_test, y_test = divide_into_train_test(df)
 
+    iterator = 0
+
+    ns = run_nameserver()
+    agents = [run_agent(f'RegressionAgent{i}', base=RegressionAgent) for i in range(number_of_agents)]
+
+    master_agent = run_agent('DecisionAgent', base=MasterClassifier)
+    master_agent.define_addr_conn(agents)
+
     for models, split in zip(models_list, split_dataset):
         number_of_agents = len(models)
         if split:
@@ -46,14 +54,10 @@ if __name__ == '__main__':
             x_train_list = [x_train for _ in range(number_of_agents)]
             y_train_list = [y_train for _ in range(number_of_agents)]
 
-        ns = run_nameserver()
-        agents = [run_agent(f'RegressionAgent{i}', base=RegressionAgent) for i in range(number_of_agents)]
         for i in range(number_of_agents):
             agents[i].initialize_agent(models[i], x_train_list[i], y_train_list[i], x_test, y_test, str(i))
             agents[i].calculate()
 
-        master_agent = run_agent('DecisionAgent', base=MasterClassifier)
-        master_agent.define_addr_conn(agents)
         master_agent.set_true_labels(y_test)
 
         # Send messages
@@ -63,9 +67,9 @@ if __name__ == '__main__':
         time.sleep(3)
         master_agent.calculate_final_prediction()
         metrics = master_agent.get_metrics()
-        DataVisualizer.print_metrics(metrics)
+        DataVisualizer.print_metrics(metrics, iterator)
 
         master_agent.debug()
-        ns.shutdown()
-
-    plt.show()
+        iterator += 1
+    ns.shutdown()
+    #plt.show()

@@ -17,7 +17,7 @@ def print_dataset_info(df):
     df.isnull().any()
 
 
-def print_metrics(metrics):
+def print_metrics(metrics, iterator):
     ind = np.arange(len(metrics))
     width = 0.35
     vals = np.array(list(metrics.values()))*100
@@ -30,3 +30,4 @@ def print_metrics(metrics):
     plt.ylabel('Difference in %')
     plt.title('Differences in accuracy score')
     plt.xticks(ind, (metrics.keys()), rotation=15)
+    plt.savefig(f'figures/metric{iterator}.png')

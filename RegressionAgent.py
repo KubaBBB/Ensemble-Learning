@@ -8,10 +8,6 @@ from sklearn.neighbors import KNeighborsRegressor
 from models import Model
 
 
-
-
-
-
 class RegressionAgent(Agent):
     def on_init(self):
         self.bind('PUSH', alias='main')
