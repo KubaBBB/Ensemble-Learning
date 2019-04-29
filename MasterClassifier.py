@@ -31,5 +31,10 @@ class MasterClassifier(Agent):
             final_prediction.append(round((p1+p2+p3+p4)/4))
         self.metrics['EnsembleClassifier'] = r2_score(self.y_true, final_prediction)
 
+    def clean_cache(self):
+        self.metrics = dict()
+        self.y_predicted = dict()
+        self.log_info("Cleaned cache on Master Agent")
+
     def debug(self):
         name = self.name

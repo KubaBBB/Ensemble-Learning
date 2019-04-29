@@ -30,4 +30,5 @@ def print_metrics(metrics, iterator):
     plt.ylabel('Difference in %')
     plt.title('Differences in accuracy score')
     plt.xticks(ind, (metrics.keys()), rotation=15)
+    plt.tight_layout()
     plt.savefig(f'figures/metric{iterator}.png')

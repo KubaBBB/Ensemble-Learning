@@ -69,6 +69,7 @@ if __name__ == '__main__':
         metrics = master_agent.get_metrics()
         DataVisualizer.print_metrics(metrics, iterator)
 
+        master_agent.clean_cache()
         master_agent.debug()
         iterator += 1
     ns.shutdown()
