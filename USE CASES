@@ -8,7 +8,7 @@ Eksperymenty 1,2,3,4
 Tworzymy 4 agenty, na każdym jest ten sam model ML. Dzielimy zbior na 5 czesci, na każdego agenta jest 
 wysylana jedna czesc zbioru, a ostatnia 5 czesc sluzy do testowania nauczonych modeli.  Piaty agent 
 zbiera od pozostałych 4 wyniki uczenia i przewiduje końcowe ceny na podstawie glosowania (każdy klasyfikator ma taka sama wage)
-Eksperyment 5
+Eksperyment 0
 Tworzymy 4 agenty, na każdym jest model drzewa decyzyjnego. Dzielimy zbior w stosunku 80:20, na każdego 
 agenta jest wysylana wieksza czesc zbioru, a mniejsza czesc sluzy do testowania nauczonych modeli.  
 Piaty agent zbiera od pozostałych 4 wyniki uczenia i przewiduje końcowe ceny na podstawie 
@@ -18,7 +18,7 @@ Tworzymy 4 agenty, na każdym jest ten sam model ML. Dzielimy zbior na 5 czesci,
 jest wysylana jedna czesc zbioru, a ostatnia 5 czesc sluzy do testowania nauczonych modeli.  
 Piaty agent zbiera od pozostałych 4 wyniki uczenia i przewiduje końcowe ceny na podstawie 
 glosowania (najlepszy klasyfikator ma wage 5, kolejny 2, kolejny 2, ostatni 1)
-Eksperyment 10
+Eksperyment 5
 Tworzymy 4 agenty, na każdym jest model drzewa decyzyjnego. Dzielimy zbior w stosunku 80:20, 
 na każdego agenta jest wysylana wieksza czesc zbioru, a mniejsza czesc sluzy do testowania nauczonych modeli.  
 Piaty agent zbiera od pozostałych 4 wyniki uczenia i przewiduje końcowe ceny na podstawie 
