@@ -11,7 +11,7 @@ import DataVisualizer
 from math import floor
 import matplotlib.pyplot as plt
 
-average = [Ensemble.WEIGHTED, Ensemble.ARITHMETIC]
+average = [Ensemble.ARITHMETIC]
 
 models_list = [[Model.DECISION_TREE, Model.DECISION_TREE, Model.DECISION_TREE, Model.DECISION_TREE],
                [Model.DECISION_TREE, Model.DECISION_TREE, Model.DECISION_TREE, Model.DECISION_TREE],
@@ -37,6 +37,8 @@ if __name__ == '__main__':
     x_train, y_train, x_test, y_test = divide_into_train_test(df)
 
     iterator = 0
+
+    DataVisualizer.print_corelation_heatmap(df);
 
     ns = run_nameserver()
     agents = [run_agent(f'RegressionAgent{i}', base=RegressionAgent) for i in range(number_of_agents)]
@@ -77,4 +79,4 @@ if __name__ == '__main__':
             iterator += 1
             time.sleep(4)
     ns.shutdown()
-    #plt.show()
+    plt.show()
