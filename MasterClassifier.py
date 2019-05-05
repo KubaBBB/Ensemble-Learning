@@ -1,6 +1,6 @@
 from osbrain import Agent
 from sklearn.metrics import mean_squared_error, r2_score, median_absolute_error, accuracy_score
-from enum import Enum
+from EnumStorage import Ensemble
 
 
 weight = [5, 2, 2, 1]
@@ -66,7 +66,3 @@ def find_key_by_value(dictionary, value_to_map):
         if value == value_to_map:
             return key
 
-
-class Ensemble(Enum):
-    ARITHMETIC = 0
-    WEIGHTED = 1

@@ -19,3 +19,19 @@ class LabelMapper(Enum):
     long = 15,
     sqft_living15= 16,
     sqft_lot15 = 17,
+
+
+class SplitDataset(Enum):
+    NONE = 0,
+    BAGGING = 1,
+    AGENT = 2,
+
+class Ensemble(Enum):
+    ARITHMETIC = 0,
+    WEIGHTED = 1,
+
+class Model(Enum):
+    BAYESIAN_RIDGE = 0
+    K_NEIGHBORS = 1
+    DECISION_TREE = 2
+    SVR = 3

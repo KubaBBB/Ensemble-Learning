@@ -5,7 +5,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.neural_network import MLPClassifier
 from sklearn.svm import SVR
 from sklearn.neighbors import KNeighborsRegressor
-from models import Model
+from EnumStorage import Model
 
 
 class RegressionAgent(Agent):

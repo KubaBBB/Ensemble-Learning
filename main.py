@@ -1,7 +1,6 @@
 import time
 import pandas as pd
 from osbrain import run_agent, run_nameserver
-from models import Model
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from MasterClassifier import MasterClassifier
@@ -10,8 +9,9 @@ from RegressionAgent import RegressionAgent
 import DataVisualizer
 from math import floor
 import matplotlib.pyplot as plt
-from enum import Enum
-from LabelMapper import LabelMapper
+from EnumStorage import LabelMapper
+from EnumStorage import SplitDataset
+from EnumStorage import Model
 
 
 average = [Ensemble.ARITHMETIC]
@@ -29,11 +29,6 @@ labels_group = [
     [LabelMapper.yr_built, LabelMapper.long, LabelMapper.grade, LabelMapper.floors],
     [LabelMapper.sqft_lot, LabelMapper.sqft_lot15, LabelMapper.floors, LabelMapper.waterfront]
 ]
-
-class SplitDataset(Enum):
-    NONE = 0,
-    BAGGING = 1,
-    AGENT = 2
 
 split_dataset = [
     SplitDataset.NONE,
