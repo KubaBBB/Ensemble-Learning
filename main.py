@@ -15,26 +15,33 @@ from EnumStorage import Model
 
 
 average = [Ensemble.ARITHMETIC]
-
-models_list = [[Model.DECISION_TREE, Model.DECISION_TREE, Model.DECISION_TREE, Model.DECISION_TREE],
-               [Model.DECISION_TREE, Model.DECISION_TREE, Model.DECISION_TREE, Model.DECISION_TREE],
-               [Model.DECISION_TREE, Model.DECISION_TREE, Model.DECISION_TREE, Model.DECISION_TREE],
-               [Model.K_NEIGHBORS, Model.K_NEIGHBORS, Model.K_NEIGHBORS, Model.K_NEIGHBORS],
-               [Model.K_NEIGHBORS, Model.K_NEIGHBORS, Model.K_NEIGHBORS, Model.K_NEIGHBORS],
+models_list = [[Model.K_NEIGHBORS, Model.BAYESIAN_RIDGE, Model.DECISION_TREE, Model.K_NEIGHBORS],
+               [Model.DECISION_TREE, Model.K_NEIGHBORS, Model.SVR, Model.DECISION_TREE],
+               [Model.BAYESIAN_RIDGE, Model.SVR, Model.BAYESIAN_RIDGE, Model.SVR],
+               [Model.SVR, Model.BAYESIAN_RIDGE, Model.DECISION_TREE, Model.K_NEIGHBORS],
+               [Model.K_NEIGHBORS, Model.DECISION_TREE, Model.DECISION_TREE, Model.K_NEIGHBORS],
                ]
 
+
+# models_list = [[Model.DECISION_TREE, Model.DECISION_TREE, Model.DECISION_TREE, Model.DECISION_TREE],
+#                [Model.DECISION_TREE, Model.DECISION_TREE, Model.K_NEIGHBORS, Model.K_NEIGHBORS],
+#                [Model.K_NEIGHBORS, Model.K_NEIGHBORS, Model.DECISION_TREE, Model.DECISION_TREE],
+#                [Model.DECISION_TREE, Model.K_NEIGHBORS, Model.K_NEIGHBORS, Model.DECISION_TREE],
+#                [Model.K_NEIGHBORS, Model.K_NEIGHBORS, Model.K_NEIGHBORS, Model.K_NEIGHBORS],
+#                ]
+
 labels_group = [
-    [LabelMapper.bedrooms, LabelMapper.bathrooms, LabelMapper.sqft_above, LabelMapper.sqft_living15],
-    [LabelMapper.sqft_living, LabelMapper.sqft_above, LabelMapper.sqft_living15, LabelMapper.grade],
-    [LabelMapper.yr_built, LabelMapper.long, LabelMapper.grade, LabelMapper.floors],
-    [LabelMapper.sqft_lot, LabelMapper.sqft_lot15, LabelMapper.floors, LabelMapper.waterfront]
+    [LabelMapper.bedrooms, LabelMapper.bathrooms, LabelMapper.sqft_living, LabelMapper.sqft_lot],
+    [LabelMapper.sqft_basement, LabelMapper.sqft_above, LabelMapper.sqft_living15, LabelMapper.sqft_lot15],
+    [LabelMapper.yr_built, LabelMapper.yr_renovated, LabelMapper.condition, LabelMapper.grade],
+    [LabelMapper.zipcode, LabelMapper.long, LabelMapper.lat, LabelMapper.waterfront]
 ]
 
 split_dataset = [
-    SplitDataset.NONE,
-    SplitDataset.BAGGING,
     SplitDataset.AGENT,
-    SplitDataset.BAGGING,
+    SplitDataset.AGENT,
+    SplitDataset.AGENT,
+    SplitDataset.AGENT,
     SplitDataset.AGENT,
     ]
 
