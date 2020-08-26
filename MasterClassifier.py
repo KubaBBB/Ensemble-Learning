@@ -31,8 +31,8 @@ class MasterClassifier(Agent):
         final_prediction = list()
         if average == Ensemble.ARITHMETIC:
             preds = list(self.y_predicted.values())
-            for p1, p2, p3, p4 in zip(preds[0], preds[1], preds[2], preds[3]):
-                final_prediction.append(round((p1 + p2 + p3 + p4) / 4))
+            for p1, p2, p3, p4, p5, p6, p7, p8 in zip(preds[0], preds[1], preds[2], preds[3], preds[4], preds[5], preds[6], preds[7]):
+                final_prediction.append(round((p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8) / 8))
         elif average == Ensemble.WEIGHTED:
             sorted_agent = self.map_weight()
             preds = [self.y_predicted[agent] for agent in sorted_agent ]

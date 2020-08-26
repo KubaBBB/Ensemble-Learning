@@ -30,10 +30,14 @@ average = [Ensemble.ARITHMETIC]
 #                [Model.K_NEIGHBORS, Model.K_NEIGHBORS, Model.K_NEIGHBORS, Model.K_NEIGHBORS],
 #                ]
 
-models_list = [[Model.DECISION_TREE, Model.DECISION_TREE, Model.DECISION_TREE, Model.DECISION_TREE],
-                [Model.BAYESIAN_RIDGE, Model.BAYESIAN_RIDGE, Model.BAYESIAN_RIDGE, Model.BAYESIAN_RIDGE],
-                [Model.SVR, Model.SVR, Model.SVR, Model.SVR],
-                [Model.K_NEIGHBORS, Model.K_NEIGHBORS, Model.K_NEIGHBORS, Model.K_NEIGHBORS],
+models_list = [[Model.DECISION_TREE, Model.DECISION_TREE, Model.DECISION_TREE, Model.DECISION_TREE, Model.DECISION_TREE, Model.DECISION_TREE,
+                Model.DECISION_TREE, Model.DECISION_TREE],
+                [Model.BAYESIAN_RIDGE, Model.BAYESIAN_RIDGE, Model.BAYESIAN_RIDGE, Model.BAYESIAN_RIDGE, Model.BAYESIAN_RIDGE, Model.BAYESIAN_RIDGE,
+                 Model.BAYESIAN_RIDGE,Model.BAYESIAN_RIDGE],
+                [Model.SVR, Model.SVR, Model.SVR, Model.SVR, Model.SVR, Model.SVR,
+                 Model.SVR,Model.SVR],
+                [Model.K_NEIGHBORS, Model.K_NEIGHBORS, Model.K_NEIGHBORS, Model.K_NEIGHBORS, Model.K_NEIGHBORS, Model.K_NEIGHBORS,
+                 Model.K_NEIGHBORS,Model.K_NEIGHBORS],
                 ]
 
 labels_group = [
@@ -51,7 +55,7 @@ split_dataset = [
     #SplitDataset.AGENT,
     ]
 
-number_of_agents = 4
+number_of_agents = 8
 
 
 def divide_into_train_test(df):
@@ -93,9 +97,9 @@ if __name__ == '__main__':
     master_agent.define_addr_conn(agents)
     for avg in average:
         for models, split in zip(models_list, split_dataset):
-            number_of_agents = len(models)
+            #number_of_agents = len(models)
             if split == SplitDataset.BAGGING:
-                divisions = [0, 0.25, 0.50, 0.75, 1.0]
+                divisions = [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0]
                 n_samples = len(x_train)
                 x_train_list = [x_train[floor(divisions[i] * n_samples):floor(divisions[i + 1] * n_samples)] for i in
                                 range(number_of_agents)]  # divide x_train for 4 equal parts
