@@ -15,12 +15,12 @@ from EnumStorage import Model
 
 
 average = [Ensemble.ARITHMETIC]
-models_list = [[Model.K_NEIGHBORS, Model.BAYESIAN_RIDGE, Model.DECISION_TREE, Model.K_NEIGHBORS],
-               [Model.DECISION_TREE, Model.K_NEIGHBORS, Model.SVR, Model.DECISION_TREE],
-               [Model.BAYESIAN_RIDGE, Model.SVR, Model.BAYESIAN_RIDGE, Model.SVR],
-               [Model.SVR, Model.BAYESIAN_RIDGE, Model.DECISION_TREE, Model.K_NEIGHBORS],
-               [Model.K_NEIGHBORS, Model.DECISION_TREE, Model.DECISION_TREE, Model.K_NEIGHBORS],
-               ]
+# models_list = [[Model.K_NEIGHBORS, Model.BAYESIAN_RIDGE, Model.DECISION_TREE, Model.K_NEIGHBORS],
+#                [Model.DECISION_TREE, Model.K_NEIGHBORS, Model.SVR, Model.DECISION_TREE],
+#                [Model.BAYESIAN_RIDGE, Model.SVR, Model.BAYESIAN_RIDGE, Model.SVR],
+#                [Model.SVR, Model.BAYESIAN_RIDGE, Model.DECISION_TREE, Model.K_NEIGHBORS],
+#                [Model.K_NEIGHBORS, Model.DECISION_TREE, Model.DECISION_TREE, Model.K_NEIGHBORS],
+#                ]
 
 
 # models_list = [[Model.DECISION_TREE, Model.DECISION_TREE, Model.DECISION_TREE, Model.DECISION_TREE],
@@ -30,6 +30,12 @@ models_list = [[Model.K_NEIGHBORS, Model.BAYESIAN_RIDGE, Model.DECISION_TREE, Mo
 #                [Model.K_NEIGHBORS, Model.K_NEIGHBORS, Model.K_NEIGHBORS, Model.K_NEIGHBORS],
 #                ]
 
+models_list = [[Model.DECISION_TREE, Model.DECISION_TREE, Model.DECISION_TREE, Model.DECISION_TREE],
+                [Model.BAYESIAN_RIDGE, Model.BAYESIAN_RIDGE, Model.BAYESIAN_RIDGE, Model.BAYESIAN_RIDGE],
+                [Model.SVR, Model.SVR, Model.SVR, Model.SVR],
+                [Model.K_NEIGHBORS, Model.K_NEIGHBORS, Model.K_NEIGHBORS, Model.K_NEIGHBORS],
+                ]
+
 labels_group = [
     [LabelMapper.bedrooms, LabelMapper.bathrooms, LabelMapper.sqft_living, LabelMapper.sqft_lot],
     [LabelMapper.sqft_basement, LabelMapper.sqft_above, LabelMapper.sqft_living15, LabelMapper.sqft_lot15],
@@ -38,11 +44,11 @@ labels_group = [
 ]
 
 split_dataset = [
-    SplitDataset.AGENT,
-    SplitDataset.AGENT,
-    SplitDataset.AGENT,
-    SplitDataset.AGENT,
-    SplitDataset.AGENT,
+    SplitDataset.NONE,
+    SplitDataset.BAGGING,
+    SplitDataset.BAGGING,
+    SplitDataset.BAGGING,
+    #SplitDataset.AGENT,
     ]
 
 number_of_agents = 4
