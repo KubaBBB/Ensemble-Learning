@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from math import floor
+import csv
 
 def print_corelation_heatmap(df):
     df.corr()['price'].sort_values(ascending=False)
@@ -22,6 +23,12 @@ def print_metrics(metrics, id, split):
     width = 0.35
     vals = np.array(list(metrics.values()))*100
     minimum = min(vals)
+
+    with open(f'results\exp1_one_type_algorithm\lab1_{id}.csv', 'w', newline='\n') as f:  # Just use 'w' mode in 3.x
+        w = csv.writer(f, delimiter=',')
+        for item in metrics:
+            w.writerow([item, metrics[item]])
+
     plt.figure()
     plt.bar(ind, vals-minimum, width, color=['green', 'blue', 'yellow', 'cyan', 'red'])
     for i, v in zip(ind, vals-minimum):

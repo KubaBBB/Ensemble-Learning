@@ -1,0 +1,5 @@
+KNeighborsRegressor0,0.5166297817009808
+BayesianRidge1,0.49245626653071517
+DecisionTreeClassifier2,0.2972708096981147
+KNeighborsRegressor3,0.6143857442297842
+EnsembleClassifier,0.712902534585639
