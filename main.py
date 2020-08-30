@@ -30,11 +30,8 @@ average = [Ensemble.ARITHMETIC]
 #                [Model.K_NEIGHBORS, Model.K_NEIGHBORS, Model.K_NEIGHBORS, Model.K_NEIGHBORS],
 #                ]
 
-models_list = [[Model.DECISION_TREE, Model.DECISION_TREE, Model.DECISION_TREE, Model.DECISION_TREE],
-                [Model.BAYESIAN_RIDGE, Model.BAYESIAN_RIDGE, Model.BAYESIAN_RIDGE, Model.BAYESIAN_RIDGE],
-                [Model.SVR, Model.SVR, Model.SVR, Model.SVR],
-                [Model.K_NEIGHBORS, Model.K_NEIGHBORS, Model.K_NEIGHBORS, Model.K_NEIGHBORS],
-                ]
+models_list = [[Model.DECISION_TREE, Model.BAYESIAN_RIDGE, Model.SVR, Model.K_NEIGHBORS],
+               [Model.DECISION_TREE, Model.DECISION_TREE, Model.DECISION_TREE, Model.K_NEIGHBORS]]
 
 labels_group = [
     [LabelMapper.bedrooms, LabelMapper.bathrooms, LabelMapper.sqft_living, LabelMapper.sqft_lot],
@@ -44,7 +41,7 @@ labels_group = [
 ]
 
 split_dataset = [
-    SplitDataset.NONE,
+    SplitDataset.BAGGING,
     SplitDataset.BAGGING,
     SplitDataset.BAGGING,
     SplitDataset.BAGGING,
